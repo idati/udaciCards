@@ -180,20 +180,20 @@ export function editCard(title, question_old, question_new, answer){
 
 export function clearLocalNotification() {
 	return AsyncStorage.removeItem(NOTIFICATION_KEY)
-		.ten(Notifications.cancelAllScheduleNotificationsAsync())
+		.then(Notifications.cancelAllScheduleNotificationsAsync)
 
 }
 
 function createNotification() {
 	return(
 		title: 'Teach Yourself',
-		body: ' Don not forget to learn today',
-		sound: true
+		body: ' Don not forget to learn today'
 		)
 
 }
 
 export function setLocalNotification() {
+	AsyncStorage.removeItem(NOTIFICATION_KEY)
 	AsyncStorage.getItem(NOTIFICATION_KEY)
 		.then(JSON.parse)
 		.then((data) => {

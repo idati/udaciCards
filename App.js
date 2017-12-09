@@ -3,7 +3,11 @@ import {  StyleSheet,
           Text, 
           View,
           StatusBar,
-          Platform, } from 'react-native';
+          Platform,
+          AppRegistry,
+          Picker, 
+          AppState,
+        } from 'react-native';
 import {TabNavigator, StackNavigator, DrawerNavigator} from 'react-navigation'
 import {createStore} from 'redux'
 import {Provider} from 'react-redux'
@@ -19,6 +23,9 @@ import {Constants} from 'expo'
 import { connect } from 'react-redux';
 import{FontAwesome, Ionicons, Entypo, MaterialCommunityIcons} from '@expo/vector-icons'
 import {setLocalNotification} from './utils/api'
+import PushController from './PushController'
+import PushNotification from 'react-native-push-notification'
+
 
 function UdaciStatusBar ({backgroundColor, ...props}){
   return(
@@ -122,9 +129,40 @@ const MainNavigator = StackNavigator({
 
 export default class App extends React.Component {
  //
+
+  constructor(props){
+    super(props)
+
+    this.handleAppStateChange=this.handleAppStateChange.bind(this)
+    this.state={
+      seconds:5,
+    }
+  }
+
   componentDidMount(){
+    AppState.addEventListener('change', this.handleAppStateChange)
     setLocalNotification()
   }
+
+  componentWillUnmount(){
+    AppState.removeEventListener('change', this.handleAppStateChange)
+  }
+
+  handleAppStateChange(appState){
+    if (appState === 'background') {
+      let date = new Date(Date.now() + (this.state.seconds * 1000));
+
+      if (Platform.OS === 'ios') {
+        date = date.toISOString();
+      }
+
+      PushNotification.localNotificationSchedule({
+        message: "My Notification Message",
+        date,
+      });
+    }
+  }
+
       // 
   render() {
     return (
@@ -132,12 +170,14 @@ export default class App extends React.Component {
         <View style={{flex:1}}>
           <UdaciStatusBar backgroundColor={purple} barStyle='light-content' />
             <MainNavigator/>
+              <PushController />
+           
         </View>
       </Provider>
     );
   }
 }
-// 
+//  
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -152,5 +192,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#757575',
     margin: 50,
+  },
+  picker:{
+    width:100,
   }
 });
+
+AppRegistry.registerComponent('PushNotificationHowTo', () => Apps)

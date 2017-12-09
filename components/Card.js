@@ -218,12 +218,13 @@ export default class Card extends React.Component {
     // this.props.navigation.state.params && console.log('infofromDeck',this.props.navigation.state.params.title.title, this.state)
     // console.log('newwww',this.props.navigation.state.params, this.state.cdat)
   if(this.state.new===false){
+        // console.log('!?!?!?!', this.props.navigation.state.params,  this.state.cdat[0], this.state.deletet)
         if(this.props.navigation.state.params && this.state.cdat[0] && this.state.deletet==false){
 
               return (
           
                   <View style={{flex:1}}>
-                    <Text>{this.props.navigation.state.params.title.title}</Text>
+                    <Text>{this.props.navigation.state.params.title.title} - {this.state.cdat[0].questions.length} cards</Text>
                       <View style={{flex:1}}>
                         <FlatList
                           data={this.state.cdat[0].questions}
@@ -264,7 +265,8 @@ export default class Card extends React.Component {
                                   this.props.navigation.navigate(
                                           'Quiz',
                                           { shouldDelete: this.props.navigation.state.params,
-                                            cdat: this.state.cdat }
+                                            cdat: this.state.cdat,
+                                            timeStamp: Date.now()}
                       )
                       )}>
                       <Text style={styles.submitBtnText}>Start Quiz</Text>

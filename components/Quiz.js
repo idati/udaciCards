@@ -14,6 +14,7 @@ class Quiz extends Component {
     	card:'question',
     	correct:0,
     	wrong:0,
+    	timeStamp:0,
 	}
 
 	// componentDidMount(){
@@ -22,7 +23,7 @@ class Quiz extends Component {
 			console.log(this.props.navigation.state.params.cdat[0].questions)
 			var tmp = []
 			tmp.push(this.props.navigation.state.params.cdat[0].questions)
-			this.setState({qdat: tmp})
+			this.setState({qdat: tmp, timeStamp:this.props.navigation.state.params.timeStamp})
 			// this.setState({deck: 'yes'})
 
 			console.log('bring to zero', this)
@@ -36,6 +37,9 @@ class Quiz extends Component {
 			var tmp = []
 			tmp.push(this.props.navigation.state.params.cdat[0].questions)
 			this.setState({qdat: tmp, count: 0, card: 'question', wrong: 0, correct: 0})
+		}
+		if(this.props.navigation.state.params && this.state.qdat[0] && this.props.navigation.state.params.timeStamp!==this.state.timeStamp && this.state.count>0){
+			this.setState({count:0, correct:0, wrong:0, timeStamp:this.props.navigation.state.params.timeStamp})
 		}
 		
 	}
@@ -232,6 +236,18 @@ class Quiz extends Component {
 							                                     // this.setState({new: true})
 							           )}>
 							        <Text style={styles.submitBtnText}>Quiz again</Text>
+							         </TouchableOpacity>
+							    <TouchableOpacity style={styles.button} onPress={() => (
+							    								// this.setState({count:0, wrong: 0, correct: 0})
+							          						// console.log(this.props.navigation.state.params.cdat[0].questions.length, this.state.count+1),
+							                                     // this.props.navigation.state.params.cdat[0].questions.length>this.state.count && this.setState({count: this.state.count+1, card: 'question', wrong: this.state.wrong+1})
+							                                     this.props.navigation.navigate(
+							                                                                     'Card',
+							                                                                     // { entryId: key }
+							                                                                   ),
+							                                     this.setState({new: true})
+							           )}>
+							        <Text style={styles.submitBtnText}>Return to Deck</Text>
 							         </TouchableOpacity>
 						</View>
 					)

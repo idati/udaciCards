@@ -6,6 +6,7 @@ import {View,
 		FlatList, 
 		StyleSheet,
     KeyboardAvoidingView,
+    TextInput,
 		Platform} from 'react-native'
 // import Card from './Card'
 import NewDeck from './NewDeck'
@@ -78,6 +79,7 @@ class Deck extends Component {
 	state={
 		dat: [],
     new: false,
+    text: 'NewDeckName',
 	}
 
 	componentDidMount(){
@@ -251,24 +253,54 @@ class Deck extends Component {
             </View>
             )}
   else{
+
+            return(
+
+                    <View>
+                       <View 
+                        // style={{
+                        //  backgroundColor: this.state.text,
+                        //  borderBottomColor: '#000000',
+                        //  borderBottomWidth: 1 }}
+                       >
+                         <TextInput
+                           style={styles.input}
+                           onChangeText={(text) => this.setState({text})}
+                           value={this.state.text}
+                         />
+                     </View>
+                        <TouchableOpacity style={styles.button} onPress={() => (
+                            console.log('this',this.state.text),
+                            // this.props.navigate('Quiz',{ entryId: key}),
+                            saveDeckTitle(this.state.text),
+                            this.insertNewDeck(this.state.text),
+                            this.updateState(),
+                            this.props.navigation.navigate('Card',{title:{'title':this.state.text, 'questions':[]}, deleteDeck:this.deleteDeck, deletet:false}),
+                            this.setState({text:'NewDeckName'})
+                            // this.props.navigation.navigate('Deck', {newDeck: this.state.text})
+                            // Keyboard.dismiss
+                            // this.props.navigation.goBack()
+                          )}><Text style={styles.submitBtnText}>Insert</Text>
+                        </TouchableOpacity>
+                     </View>                
+
+            )
   
-              return(
-               <View style={{flex:1}}>
-               <KeyboardAvoidingView>
-                <View style={{flex:1}}>
-                  <FlatList style={{flex:1}}
-                    data={this.state.dat}
-                    keyExtractor={item => item.title}
-                    renderItem={this.renderItem}>
-                  </FlatList>
-                </View>
-                  <NewDeck updateState={this.updateState} insertNewDeck={this.insertNewDeck}/>
-                </KeyboardAvoidingView>
-              </View>
-              )}
-
-
-
+              // return(
+              //  <View style={{flex:1}}>
+              //  <KeyboardAvoidingView>
+              //   <View style={{flex:1}}>
+              //     <FlatList style={{flex:1}}
+              //       data={this.state.dat}
+              //       keyExtractor={item => item.title}
+              //       renderItem={this.renderItem}>
+              //     </FlatList>
+              //   </View>
+              //     <NewDeck updateState={this.updateState} insertNewDeck={this.insertNewDeck}/>
+              //   </KeyboardAvoidingView>
+              // </View>
+              // )
+      }
 	}
 }
 
